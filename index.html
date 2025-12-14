@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Generator Encryptor</title>
+
+<style>
+body{background:#0f0f0f;color:#00ff9c;font-family:Arial;padding:30px}
+textarea,input,select,button{
+  width:100%;margin:8px 0;padding:10px;
+  background:#1e1e1e;color:#00ff9c;border:1px solid #00ff9c
+}
+</style>
+</head>
+
+<body>
+<h2>🔐 Generator Encryptor</h2>
+
+<input type="file" id="files" multiple>
+<select id="lang">
+  <option value="js">JavaScript</option>
+</select>
+
+<button onclick="upload()">Obfuscate</button>
+<pre id="out"></pre>
+
+<script>
+function upload(){
+  const files=document.getElementById("files").files;
+  const form=new FormData();
+  for(const f of files) form.append("files",f);
+
+  fetch("/api/obfuscate",{
+    method:"POST",
+    headers:{ "x-license-key":"enc-2025" },
+    body:form
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    document.getElementById("out").textContent =
+      JSON.stringify(d,null,2);
+  });
+}
+</script>
+</body>
+</html>
