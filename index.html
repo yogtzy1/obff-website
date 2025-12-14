@@ -5,42 +5,112 @@
 <title>Generator Encryptor</title>
 
 <style>
-body{background:#0f0f0f;color:#00ff9c;font-family:Arial;padding:30px}
-textarea,input,select,button{
-  width:100%;margin:8px 0;padding:10px;
-  background:#1e1e1e;color:#00ff9c;border:1px solid #00ff9c
+body{
+  background:#0f0f0f;
+  color:#00ff9c;
+  font-family:Arial,Helvetica,sans-serif;
+  padding:30px;
+}
+h1{margin-bottom:5px}
+input,select,button,pre{
+  width:100%;
+  margin:10px 0;
+  padding:12px;
+  background:#1e1e1e;
+  color:#00ff9c;
+  border:1px solid #00ff9c;
+}
+button{
+  cursor:pointer;
+  font-weight:bold;
+}
+pre{
+  white-space:pre-wrap;
+  word-break:break-all;
+  min-height:120px;
+}
+footer{
+  margin-top:30px;
+  font-size:12px;
+  opacity:.7;
 }
 </style>
 </head>
 
 <body>
-<h2>🔐 Generator Encryptor</h2>
 
-<input type="file" id="files" multiple>
-<select id="lang">
-  <option value="js">JavaScript</option>
-</select>
+<h1>🔐 Generator Encryptor</h1>
+<p>Server-Side JavaScript Obfuscator</p>
 
-<button onclick="upload()">Obfuscate</button>
-<pre id="out"></pre>
+<input type="file" id="files" multiple accept=".js">
+
+<input
+  type="text"
+  id="license"
+  placeholder="License key"
+  value="enc-2025"
+/>
+
+<button onclick="upload()">🚀 Obfuscate</button>
+
+<pre id="output">Hasil akan muncul di sini…</pre>
+
+<button onclick="download()">⬇ Download hasil</button>
+
+<footer>
+  © 2025 Generator Encryptor
+</footer>
 
 <script>
-function upload(){
-  const files=document.getElementById("files").files;
-  const form=new FormData();
-  for(const f of files) form.append("files",f);
+let lastResult = {};
 
-  fetch("/api/obfuscate",{
-    method:"POST",
-    headers:{ "x-license-key":"enc-2025" },
-    body:form
+function upload(){
+  const files = document.getElementById("files").files;
+  const license = document.getElementById("license").value;
+
+  if(!files.length){
+    alert("Upload minimal 1 file .js");
+    return;
+  }
+
+  const form = new FormData();
+  for(const f of files){
+    form.append("files", f);
+  }
+
+  fetch("https://API-DOMAIN-KAMU/api/obfuscate", {
+    method: "POST",
+    headers: {
+      "x-license-key": license
+    },
+    body: form
   })
-  .then(r=>r.json())
-  .then(d=>{
-    document.getElementById("out").textContent =
-      JSON.stringify(d,null,2);
+  .then(r => r.json())
+  .then(data => {
+    lastResult = data;
+    document.getElementById("output").textContent =
+      JSON.stringify(data, null, 2);
+  })
+  .catch(err => {
+    document.getElementById("output").textContent =
+      "❌ ERROR: " + err;
   });
 }
+
+function download(){
+  if(!Object.keys(lastResult).length){
+    alert("Belum ada hasil");
+    return;
+  }
+
+  const content = Object.values(lastResult).join("\n\n");
+  const blob = new Blob([content], { type: "text/javascript" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "obfuscated.js";
+  a.click();
+}
 </script>
+
 </body>
 </html>
