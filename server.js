@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const LICENSE_KEY = "enc-2025";
-const ALLOWED_DOMAIN = "yourdomain.com"; // ganti setelah deploy
+const ALLOWED_DOMAIN = "https://obff-website.vercel.app"; // ganti setelah deploy
 
 app.post("/api/obfuscate", upload.array("files"), (req, res) => {
   const license = req.headers["x-license-key"];
