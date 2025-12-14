@@ -2,93 +2,110 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>enkripsi kuat</title>
+<title>Generator Encryptor</title>
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #0f0f0f;
-    color: #00ff9c;
-    text-align: center;
-    margin-top: 60px;
-  }
+body{
+  background:#0f0f0f;
+  color:#00ff9c;
+  font-family:Arial;
+  padding:30px;
+}
+textarea,select,input,button{
+  width:100%;
+  margin:8px 0;
+  padding:10px;
+  background:#1e1e1e;
+  color:#00ff9c;
+  border:1px solid #00ff9c;
+}
+button{
+  cursor:pointer;
+  font-weight:bold;
+}
+pre{
+  background:#000;
+  padding:15px;
+  white-space:pre-wrap;
+}
 </style>
-
-<script>
-/* =========================
-   ANTI INSPECT + ANTI DEBUG
-   ========================= */
-(function () {
-  const kill = () => {
-    document.documentElement.innerHTML = "";
-    document.documentElement.style.background = "black";
-  };
-
-  // Detect DevTools (size check)
-  setInterval(() => {
-    if (
-      window.outerWidth - window.innerWidth > 150 ||
-      window.outerHeight - window.innerHeight > 150
-    ) kill();
-  }, 300);
-
-  // Disable inspect shortcuts
-  document.addEventListener("keydown", e => {
-    if (
-      e.keyCode === 123 ||
-      (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) ||
-      (e.ctrlKey && e.key === "U")
-    ) {
-      e.preventDefault();
-      kill();
-    }
-  });
-
-  // Debugger trap
-  setInterval(() => {
-    Function("debugger")();
-  }, 100);
-})();
-</script>
-
-<script>
-/* =========================
-   SIMPLE LICENSE CHECK
-   ========================= */
-(function () {
-  const LICENSE_KEY = "enc-2025";
-
-  // Ubah ini kalau mau kunci domain
-  const ALLOWED_DOMAIN = location.hostname;
-
-  const input = prompt("Masukkan license key:");
-
-  if (input !== LICENSE_KEY) {
-    document.body.innerHTML = "❌ LICENSE INVALID";
-    document.body.style.color = "red";
-    return;
-  }
-
-  if (location.hostname !== ALLOWED_DOMAIN) {
-    document.body.innerHTML = "❌ DOMAIN TIDAK VALID";
-    return;
-  }
-})();
-</script>
-
 </head>
 
 <body>
-<h1>🔐 Enkripsi Kuat Aktif</h1>
-<p>Website dilindungi sistem keamanan</p>
+
+<h2>🔐 Generator Encryptor</h2>
+<p>Upload file atau paste code → pilih bahasa → obfuscate</p>
+
+<!-- Upload -->
+<input type="file" id="fileInput">
+
+<!-- Pilih bahasa -->
+<select id="lang">
+  <option value="js">JavaScript</option>
+  <option value="html">HTML</option>
+  <option value="css">CSS</option>
+</select>
+
+<!-- Input code -->
+<textarea id="input" rows="10" placeholder="Paste code di sini..."></textarea>
+
+<button onclick="process()">🔒 Obfuscate</button>
+<button onclick="download()">⬇ Download</button>
+
+<h3>Hasil:</h3>
+<pre id="output"></pre>
 
 <script>
-/* =========================
-   LOGIC UTAMA WEBSITE
-   ========================= */
-(function(){
-  console.log("Aplikasi berjalan dengan aman");
-})();
+/* ======================
+   FILE UPLOAD HANDLER
+   ====================== */
+document.getElementById("fileInput").addEventListener("change", e=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>document.getElementById("input").value=reader.result;
+  reader.readAsText(file);
+});
+
+/* ======================
+   OBFUSCATION ENGINE
+   ====================== */
+function process(){
+  const code=document.getElementById("input").value;
+  const lang=document.getElementById("lang").value;
+  let result="";
+
+  if(lang==="js"){
+    result=btoa(unescape(encodeURIComponent(code)))
+      .split("").reverse().join("");
+    result=`eval(atob("${result.split("").reverse().join("")}"));`;
+  }
+
+  if(lang==="html"){
+    result=code.split("")
+      .map(c=>"&#"+c.charCodeAt(0)+";")
+      .join("");
+  }
+
+  if(lang==="css"){
+    result=code.replace(/\s+/g," ")
+      .replace(/[a-zA-Z]/g,c=>"\\x"+c.charCodeAt(0).toString(16));
+  }
+
+  document.getElementById("output").textContent=result;
+}
+
+/* ======================
+   DOWNLOAD RESULT
+   ====================== */
+function download(){
+  const text=document.getElementById("output").textContent;
+  const blob=new Blob([text],{type:"text/plain"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="obfuscated.txt";
+  a.click();
+}
 </script>
 
 </body>
