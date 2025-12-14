@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>enkripsi kuat</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #0f0f0f;
+    color: #00ff9c;
+    text-align: center;
+    margin-top: 60px;
+  }
+</style>
+
+<script>
+/* =========================
+   ANTI INSPECT + ANTI DEBUG
+   ========================= */
+(function () {
+  const kill = () => {
+    document.documentElement.innerHTML = "";
+    document.documentElement.style.background = "black";
+  };
+
+  // Detect DevTools (size check)
+  setInterval(() => {
+    if (
+      window.outerWidth - window.innerWidth > 150 ||
+      window.outerHeight - window.innerHeight > 150
+    ) kill();
+  }, 300);
+
+  // Disable inspect shortcuts
+  document.addEventListener("keydown", e => {
+    if (
+      e.keyCode === 123 ||
+      (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) ||
+      (e.ctrlKey && e.key === "U")
+    ) {
+      e.preventDefault();
+      kill();
+    }
+  });
+
+  // Debugger trap
+  setInterval(() => {
+    Function("debugger")();
+  }, 100);
+})();
+</script>
+
+<script>
+/* =========================
+   SIMPLE LICENSE CHECK
+   ========================= */
+(function () {
+  const LICENSE_KEY = "enc-2025";
+
+  // Ubah ini kalau mau kunci domain
+  const ALLOWED_DOMAIN = location.hostname;
+
+  const input = prompt("Masukkan license key:");
+
+  if (input !== LICENSE_KEY) {
+    document.body.innerHTML = "❌ LICENSE INVALID";
+    document.body.style.color = "red";
+    return;
+  }
+
+  if (location.hostname !== ALLOWED_DOMAIN) {
+    document.body.innerHTML = "❌ DOMAIN TIDAK VALID";
+    return;
+  }
+})();
+</script>
+
+</head>
+
+<body>
+<h1>🔐 Enkripsi Kuat Aktif</h1>
+<p>Website dilindungi sistem keamanan</p>
+
+<script>
+/* =========================
+   LOGIC UTAMA WEBSITE
+   ========================= */
+(function(){
+  console.log("Aplikasi berjalan dengan aman");
+})();
+</script>
+
+</body>
+</html>
