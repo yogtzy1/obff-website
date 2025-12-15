@@ -1,26 +1,29 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8">
 <title>Struk Digital</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>🧾 STRUK DeCaffe Angkasa</h2>
-<div id="data"></div>
-<button onclick="window.print()">🖨️ Print</button>
+<h2>🧾 Struk Digital</h2>
+<div id="struk"></div>
 
 <script>
 const o = JSON.parse(localStorage.getItem("lastOrder"));
-let html = "";
-o.items.forEach(i => {
-  html += `<p>${i.name} - Rp${i.price}</p>`;
+let html = `
+Nama: ${o.nama}<br>
+Email: ${o.email}<br>
+Bangku: ${o.bangku}<br>
+Payment: ${o.payment}<hr>
+`;
+o.items.forEach(i=>{
+  html += `${i.name} Rp${i.price}<br>`;
 });
-html += `<hr><h3>Total: Rp${o.total}</h3>`;
-html += `<p>${o.time}</p>`;
-document.getElementById("data").innerHTML = html;
+html += `<h3>Total Rp${o.total}</h3><p>${o.time}</p>`;
+document.getElementById("struk").innerHTML = html;
 </script>
 
 </body>
 </html>
+
