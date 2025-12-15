@@ -12,7 +12,7 @@ body{
   padding:30px;
 }
 h1{margin-bottom:5px}
-input,select,button,pre{
+input,button,pre{
   width:100%;
   margin:10px 0;
   padding:12px;
@@ -20,10 +20,7 @@ input,select,button,pre{
   color:#00ff9c;
   border:1px solid #00ff9c;
 }
-button{
-  cursor:pointer;
-  font-weight:bold;
-}
+button{cursor:pointer;font-weight:bold}
 pre{
   white-space:pre-wrap;
   word-break:break-all;
@@ -44,73 +41,106 @@ footer{
 
 <input type="file" id="files" multiple accept=".js">
 
-<input
-  type="text"
-  id="license"
-  placeholder="License key"
-  value="enc-2025"
-/>
+<input type="text" id="license" placeholder="License key" value="enc-2025"/>
 
 <button onclick="upload()">🚀 Obfuscate</button>
+<button onclick="payMidtrans()">💳 Beli License</button>
 
 <pre id="output">Hasil akan muncul di sini…</pre>
-
 <button onclick="download()">⬇ Download hasil</button>
 
-<footer>
-  © 2025 Generator Encryptor
-</footer>
+<footer>© 2025 Generator Encryptor</footer>
+
+<!-- MIDTRANS -->
+<script src="https://app.midtrans.com/snap/snap.js"
+data-client-key="MIDTRANS_CLIENT_KEY_KAMU"></script>
 
 <script>
 let lastResult = {};
 
-function upload(){
-  const files = document.getElementById("files").files;
-  const license = document.getElementById("license").value;
+/* 🔒 HARDWARE FINGERPRINT */
+async function getFingerprint(){
+  const data=[
+    navigator.userAgent,
+    navigator.language,
+    screen.width+"x"+screen.height,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    navigator.hardwareConcurrency,
+    navigator.deviceMemory
+  ].join("|");
+
+  const hash=await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(data)
+  );
+
+  return [...new Uint8Array(hash)]
+    .map(b=>b.toString(16).padStart(2,"0"))
+    .join("");
+}
+
+/* 🚀 UPLOAD + OBFUSCATE */
+async function upload(){
+  const files=document.getElementById("files").files;
+  const license=document.getElementById("license").value;
 
   if(!files.length){
     alert("Upload minimal 1 file .js");
     return;
   }
 
-  const form = new FormData();
+  const fp=await getFingerprint();
+  const form=new FormData();
+
   for(const f of files){
-    form.append("files", f);
+    form.append("files",f);
   }
 
-  fetch("https://API-DOMAIN-KAMU/api/obfuscate", {
-    method: "POST",
-    headers: {
-      "x-license-key": license
+  fetch("https://API-DOMAIN-KAMU/api/obfuscate",{
+    method:"POST",
+    headers:{
+      "x-license-key":license,
+      "x-device-fp":fp
     },
-    body: form
+    body:form
   })
-  .then(r => r.json())
-  .then(data => {
-    lastResult = data;
-    document.getElementById("output").textContent =
-      JSON.stringify(data, null, 2);
+  .then(r=>r.json())
+  .then(data=>{
+    lastResult=data;
+    output.textContent=JSON.stringify(data,null,2);
   })
-  .catch(err => {
-    document.getElementById("output").textContent =
-      "❌ ERROR: " + err;
+  .catch(err=>{
+    output.textContent="❌ ERROR: "+err;
   });
 }
 
+/* ⬇ DOWNLOAD */
 function download(){
   if(!Object.keys(lastResult).length){
     alert("Belum ada hasil");
     return;
   }
-
-  const content = Object.values(lastResult).join("\n\n");
-  const blob = new Blob([content], { type: "text/javascript" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "obfuscated.js";
+  const content=Object.values(lastResult).join("\n\n");
+  const blob=new Blob([content],{type:"text/javascript"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="obfuscated.js";
   a.click();
+}
+
+/* 💳 MIDTRANS PAYMENT */
+function payMidtrans(){
+  fetch("https://API-DOMAIN-KAMU/api/payment-midtrans")
+    .then(r=>r.json())
+    .then(d=>{
+      snap.pay(d.token,{
+        onSuccess:()=>alert("Pembayaran berhasil! License dikirim."),
+        onError:()=>alert("Pembayaran gagal")
+      });
+    });
 }
 </script>
 
 </body>
 </html>
+
