@@ -1,22 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<title>Kasir - DeCaffe Angkasa</title>
+<meta charset="UTF-8">
+<title>DeCaffe Angkasa</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>🔐 Login Kasir</h2>
-<input type="password" id="pass" placeholder="Password admin">
-<button onclick="login()">Masuk</button>
+<header>
+  <h1>☕ DeCaffe Angkasa</h1>
+  <p>Modern Digital Angkringan</p>
+</header>
 
-<div id="dashboard" style="display:none">
-  <h2>📋 Pesanan Masuk</h2>
-  <ul id="orders"></ul>
-</div>
+<section class="menu">
+  <h2>Menu</h2>
 
-<audio id="sound" src="assets/audio/notify.mp3"></audio>
+  <div class="item">
+    <span>Nasi Kucing</span>
+    <span>Rp5.000</span>
+    <button onclick="addItem('Nasi Kucing',5000)">+</button>
+  </div>
 
-<script src="kasir.js"></script>
+  <div class="item">
+    <span>Sate Usus</span>
+    <span>Rp3.000</span>
+    <button onclick="addItem('Sate Usus',3000)">+</button>
+  </div>
+
+  <div class="item">
+    <span>Es Teh</span>
+    <span>Rp3.000</span>
+    <button onclick="addItem('Es Teh',3000)">+</button>
+  </div>
+</section>
+
+<section class="cart">
+  <h2>Pesanan</h2>
+  <ul id="cart"></ul>
+  <h3>Total: Rp <span id="total">0</span></h3>
+
+  <img src="assets/qr/qris.png" class="qris">
+  <button onclick="checkout()">Saya Sudah Bayar</button>
+</section>
+
+<a class="wa" href="https://wa.me/6285762184102" target="_blank">
+💬 WhatsApp Admin
+</a>
+
+<script src="app.js"></script>
 </body>
 </html>
+
