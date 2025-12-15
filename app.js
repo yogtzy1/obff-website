@@ -50,3 +50,66 @@ function checkout() {
   window.location = "struk.html";
 }
 
+const menu = [
+  {name:"Nasi Kucing", price:5000},
+  {name:"Sate Usus", price:3000},
+  {name:"Telur Puyuh", price:4000},
+  {name:"Gorengan", price:2000},
+  {name:"Es Teh", price:3000},
+  {name:"Kopi", price:5000}
+];
+
+let cart = [];
+const menuEl = document.getElementById("menu");
+const cartEl = document.getElementById("cart");
+
+menu.forEach((m,i)=>{
+  menuEl.innerHTML += `
+    <div class="item">
+      ${m.name} - Rp${m.price}
+      <button onclick="add(${i})">+</button>
+    </div>`;
+});
+
+function add(i){
+  cart.push(menu[i]);
+  render();
+}
+
+function render(){
+  cartEl.innerHTML="";
+  let total=0;
+  cart.forEach(i=>{
+    total+=i.price;
+    cartEl.innerHTML+=`<li>${i.name} Rp${i.price}</li>`;
+  });
+  document.getElementById("jumlah").innerText = cart.length;
+  document.getElementById("total").innerText = total;
+}
+
+function checkout(){
+  if(!nama.value || !bangku.value){
+    alert("Nama & nomor bangku wajib diisi");
+    return;
+  }
+
+  const order = {
+    id: Date.now(),
+    nama: nama.value,
+    email: email.value,
+    bangku: bangku.value,
+    items: cart,
+    jumlah: cart.length,
+    total: cart.reduce((a,b)=>a+b.price,0),
+    payment: payment.value,
+    status: "Menunggu",
+    time: new Date().toLocaleString()
+  };
+
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  orders.push(order);
+  localStorage.setItem("orders", JSON.stringify(orders));
+  localStorage.setItem("lastOrder", JSON.stringify(order));
+
+  window.location = "struk.html";
+}
