@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+<meta charset="UTF-8">
 <title>Kasir - DeCaffe Angkasa</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>🔐 Login Kasir</h2>
+<h2>🔐 Kasir DeCaffe Angkasa</h2>
 <input type="password" id="pass" placeholder="Password admin">
 <button onclick="login()">Masuk</button>
 
-<div id="dashboard" style="display:none">
-  <h2>📋 Pesanan Masuk</h2>
-  <ul id="orders"></ul>
+<div id="panel" style="display:none">
+  <h3>📥 Pesanan Masuk</h3>
+  <div id="order"></div>
 </div>
 
-<audio id="sound" src="assets/audio/notify.mp3"></audio>
-
 <script src="kasir.js"></script>
+<script src="audio.js"></script>
 </body>
 </html>
+
