@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Laporan Penjualan</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>📊 Laporan</h2>
+
+<input type="password" id="pass" placeholder="Password admin">
+<button onclick="login()">Masuk</button>
+
+<div id="panel" style="display:none">
+  <p>Total Order: <b id="count"></b></p>
+  <p>Omzet: Rp <b id="omzet"></b></p>
+  <button onclick="exportExcel()">📥 Export Excel</button>
+  <button onclick="window.print()">🖨️ Print</button>
+  <ul id="data"></ul>
+</div>
+
+<script src="laporan.js"></script>
+</body>
+</html>
