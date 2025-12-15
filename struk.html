@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Struk Digital</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>🧾 STRUK DeCaffe Angkasa</h2>
+<div id="detail"></div>
+
+<button onclick="window.print()">🖨️ Print</button>
+
+<script>
+const data = JSON.parse(localStorage.getItem("lastOrder"));
+let html = "";
+data.items.forEach(i=>{
+  html += `<p>${i.name} - Rp${i.price}</p>`;
+});
+html += `<h3>Total: Rp${data.total}</h3>`;
+document.getElementById("detail").innerHTML = html;
+</script>
+
+</body>
+</html>
